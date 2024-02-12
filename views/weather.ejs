@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Weather Details</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #weather-info {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather Details</h1>
+    <div id="weather-info"></div>
+    <div id="map" style="height: 400px; width: 100%;"></div>
+    
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        function getQueryParams() {
+            const params = {};
+            const queryStrings = window.location.search.substring(1).split('&');
+            queryStrings.forEach(function(param) {
+                const pair = param.split('=');
+                params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+            });
+            return params;
+        }
+
+        function initMap(latitude, longitude) {
+            var map = L.map('map').setView([latitude, longitude], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+        }
+
+        const params = getQueryParams();
+        const weatherInfoDiv = document.getElementById('weather-info');
+        weatherInfoDiv.innerHTML = `
+            <h2>${params.city}</h2>
+            <p>Temperature: ${params.temp}°C</p>
+            <p>Description: ${params.desc}</p>
+            <p>Feels like: ${params.feelsLike}°C</p>
+            <p>Humidity: ${params.humidity}%</p>
+            <p>Pressure: ${params.pressure} hPa</p>
+            <p>Wind Speed: ${params.windSpeed} m/s</p>
+            <p>Country Code: ${params.countryCode}</p>
+            <img src="https://openweathermap.org/img/wn/${params.icon}@2x.png" alt="weather icon">
+        `;
+
+        initMap(params.lat, params.lon);
+    </script>
+</body>
+</html>
