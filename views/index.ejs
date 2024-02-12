@@ -3,45 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title> 
+    <title>Auth Page</title>
+    <link rel="stylesheet" href="/styles/indexSt.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-        }
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
 
-        form {
-            margin-bottom: 20px;
+.auth-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btn {
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin: 10px;
+    width: 100px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+footer {
+            margin-top: auto;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f2f5;
+            color: #333;
+            position: absolute;
+            bottom: 0;
         }
     </style>
 </head>
 <body>
     <div class="auth-buttons">
-        <a href="/register">Register</a>
-        <a href="/login">Login</a>
+        <a href="/login" class="btn">Login</a>
+        <a href="/register" class="btn">Register</a>
     </div>
-    <h1>Check the Weather</h1>
-    <form action="/" method="post">
-        <input type="text" name="cityName" placeholder="Enter a city" required>
-        <button type="submit">Get Weather</button>
-    </form>
-
-    <% if (weather) { %> 
-        <div>
-            <p>Temperature: <%= weather.temperature %></p>
-            <p>Condition: <%= weather.condition %></p>
-
-        </div>
-    <% } %>
-
-    
-    
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
+    <footer>
+        Skakova Nargiz SE-2204
+    </footer>
 </body>
 </html>

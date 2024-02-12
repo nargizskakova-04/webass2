@@ -1,20 +1,40 @@
 const express = require('express');
 const https = require('https');
 const app = express();
+const path = require('path');
 const mongoose = require('mongoose');
 
 app.set('view engine', 'ejs');
 
 app.use(express.urlencoded({ extended: true }));
 
-//scheme
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    firstName: String,
-    lastName: String
+    username: String,
+    creationDate: { type: Date, default: Date.now },
+    updateDate: { type: Date, default: Date.now },
+    deletionDate: { type: Date, default: null },
+    isAdmin: { type: Boolean, default: false }
 });
 
+
+userSchema.pre('save', async function (next) {
+    if (this.isModified('password') || this.isNew) {
+        const hash = await bcrypt.hash(this.password, saltRounds);
+        this.password = hash;
+    }
+    if (!this.isNew) {
+        this.updateDate = Date.now();
+    }
+    next();
+});
 
 // Подключение к MongoDB
 
@@ -89,12 +109,11 @@ app.get('/register', function(req, res) {
 });
 
 app.post('/register', function(req, res) {
-    const { email, password, firstName, lastName } = req.body;
+    const { email, password, username } = req.body;
     const newUser = new User({
         email,
         password,
-        firstName,
-        lastName
+        username
     });
 
     newUser.save()
@@ -114,8 +133,13 @@ app.post('/login', async function(req, res) {
 
     try {
         const user = await User.findOne({ email: email });
-        if (user && user.password === password) {
-            res.render('user', { user: user });
+        if (user) {
+            const match = await bcrypt.compare(password, user.password);
+            if (match) {
+                res.render('user', { user: user });
+            } else {
+                res.redirect('/login');
+            }
         } else {
             res.redirect('/login');
         }
@@ -124,8 +148,6 @@ app.post('/login', async function(req, res) {
         res.redirect('/login');
     }
 });
-
-
 
 
 app.listen(3000, function(){
