@@ -4,10 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .user-card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px auto;
+            display: block;
+            max-width: 400px;
+            background-color: #f9f9f9;
+        }
+
+        .weather-form {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .form-control, .btn {
+            margin-top: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: .25rem;
+            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+
+        @media (min-width: 576px) {
+            .form-inline .form-control {
+                display: inline-block;
+                width: auto;
+                vertical-align: middle;
+            }
+
+            .form-inline .btn {
+                display: inline-block;
+            }
+        }
+    </style>
 </head>
 <body>
     <h1>User Profile</h1>
-    <p>Email: <%= user.email %></p>
-    <p>User Name: <%= user.username %></p>
+    <div class="user-card">
+        <p>Email: <%= user.email %></p>
+        <p>User Name: <%= user.username %></p>
+    </div>
+    <h1>Check the Weather</h1>
+    <div class="weather-form">
+        <form action="/" method="post" class="form-inline justify-content-center">
+            <input type="text" name="cityName" class="form-control" placeholder="Enter a city" required>
+            <button type="submit" class="btn btn-primary ml-2">Get Weather</button>
+        </form>
+    </div>
 </body>
 </html>
