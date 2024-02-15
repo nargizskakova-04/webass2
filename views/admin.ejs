@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 20px auto;
+            max-width: 500px;
+            background-color: #f9f9f9;
+        }
+
+        .form-section {
+            margin-top: 30px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .form-control, .btn {
+            margin-top: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        footer {
+            margin-top: auto;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f2f5;
+            color: #333;
+            position: absolute;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Panel</h1>
+
+
+    <div class="card form-section">
+        <div class="card-body">
+            <h2 class="card-title">Add User</h2>
+            <form action="/admin/add-user" method="POST">
+                <div class="form-group">
+                    Email: <input type="email" class="form-control" name="email" required>
+                </div>
+                <div class="form-group">
+                    Username: <input type="text" class="form-control" name="username" required>
+                </div>
+                <div class="form-group">
+                    Password: <input type="password" class="form-control" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add User</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="card form-section">
+        <div class="card-body">
+            <h2 class="card-title">Users List</h2>
+            <ul class="list-group list-group-flush">
+                <% users.forEach(function(user) { %>
+                    <li class="list-group-item">
+                        <%= user.username %> - <%= user.email %>
+                        <a href="/admin/edit-user/<%= user._id %>" class="btn btn-sm btn-secondary">Edit</a>
+                        <form action="/admin/delete-user/<%= user._id %>" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </li>
+                <% }); %>
+            </ul>
+        </div>
+    </div>
+    
+
+</body>
+</html>
+

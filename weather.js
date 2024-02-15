@@ -137,7 +137,11 @@ app.post('/login', async function(req, res) {
         if (user) {
             const match = await bcrypt.compare(password, user.password);
             if (match) {
-                res.render('user', { user: user });
+                if (user.isAdmin) {
+                    res.redirect('/admin');
+                } else {
+                    res.render('user', { user: user });
+                }
             } else {
                 res.redirect('/login');
             }
@@ -149,6 +153,55 @@ app.post('/login', async function(req, res) {
         res.redirect('/login');
     }
 });
+
+
+app.get('/admin', async (req, res) => {
+    try {
+      const users = await User.find(); 
+      res.render('admin', { users });
+    } catch (error) {
+      console.error(error);
+      res.send("An error occurred while fetching users.");
+    }
+  });
+
+  app.post('/admin/add-user', async (req, res) => {
+    const { email, username, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10); 
+    const newUser = new User({
+      email,
+      username,
+      password: hashedPassword,
+    });
+  
+    try {
+      await newUser.save();
+      res.redirect('/admin'); 
+    } catch (error) {
+      console.error(error);
+      res.send("Failed to add new user.");
+    }
+  });
+  app.post('/admin/delete-user/:userId', async (req, res) => {
+    try {
+      await User.findByIdAndDelete(req.params.userId);
+      res.redirect('/admin');
+    } catch (error) {
+      console.error(error);
+      res.send("Failed to delete user.");
+    }
+  });
+
+  function isAdmin(req, res, next) {
+    if (req.user && req.user.isAdmin) {
+      next();
+    } else {
+      res.status(403).send("Access Denied");
+    }
+  }
+  
+  app.use('/admin', isAdmin); 
+  
 
 
 app.listen(3000, function(){
